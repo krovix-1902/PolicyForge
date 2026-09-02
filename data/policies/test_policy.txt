@@ -1,0 +1,32 @@
+POLICYFORGE ACCEPTABLE USE & SECURITY POLICY
+
+1. PHISHING
+Employees must not click links or open attachments in suspicious emails.
+Employees should report suspicious emails to the IT team.
+
+2. PASSWORDS
+Employees must never share their passwords with another person.
+
+3. CONFIDENTIAL DATA
+Employees must not share confidential company information with unauthorised people.
+
+4. GENERATIVE AI
+Employees must not enter confidential company information into public AI tools.
+
+5. USB DEVICES
+Employees must not connect unknown USB devices to company computers.
+
+6. REMOTE WORKING
+Employees must use approved devices when working remotely.
+
+7. LOST DEVICES
+Employees should report lost company devices to the IT team.
+
+8. SECURITY INCIDENTS
+Employees should report security incidents as soon as possible.
+
+9. PUBLIC WI-FI
+Employees should use approved security protections when accessing company systems on public Wi-Fi.
+
+10. SOFTWARE
+Employees must not install unauthorised software on company computers.
