@@ -1,29 +1,65 @@
-from app.policy.analyser import analyse_rule
+from app.policy.requirements import extract_requirements
+from app.policy.control_mapper import map_requirement
+from app.policy.risk_mapper import map_risk
+from app.personas.persona_engine import personas
+from app.scenarios.scenario_engine import scenarios
+from app.simulation.decision_engine import make_decision
+from app.simulation.policy_tester import test_policy
+from app.simulation.relevance import is_relevant
+from app.findings.finding_engine import create_finding
 
 
-def load_policy(file):
-    with open(file, "r") as f:
-        return f.read()
+with open("data/policies/test_policy.txt", "r") as f:
+    policy = f.read()
 
 
-policy = load_policy("data/policies/test_policy.txt")
+requirements = extract_requirements(policy)
 
-print("=== POLICYFORGE ===")
 print()
-print("POLICY ANALYSIS")
-print("----------------")
+print("================================")
+print("        POLICYFORGE")
+print("================================")
+print()
 
-for line in policy.splitlines():
+for requirement in requirements:
 
-    line = line.strip()
+    control = map_requirement(requirement)
+    risk = map_risk(requirement)
 
-    if not line:
-        continue
+    for persona in personas:
 
-    if line[0].isdigit() and "." in line:
-        print()
-        print(line)
+        for scenario in scenarios:
 
-    elif "must" in line.lower() or "should" in line.lower():
-        result = analyse_rule(line)
-        print("  ", result, ":", line)
+            if not is_relevant(requirement, scenario):
+                continue
+
+            decision = make_decision(
+                persona,
+                scenario
+            )
+
+            result = test_policy(
+                requirement,
+                scenario,
+                decision
+            )
+
+            if result["result"] == "FAIL":
+
+                finding = create_finding(
+                    result,
+                    control,
+                    risk
+                )
+
+                print("FINDING")
+                print("----------------")
+                print("Persona:", persona["name"])
+                print("Requirement:", requirement["id"])
+                print("Scenario:", scenario["name"])
+                print("Expected:", result["expected"])
+                print("Actual:", result["actual"])
+                print("Control:", control)
+                print("Risk:", risk)
+                print("Severity:", finding["severity"])
+                print()
