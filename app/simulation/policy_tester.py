@@ -1,45 +1,31 @@
-def get_behaviour(text):
-
-    text = text.lower()
-
-    if "click" in text and "do not" in text:
-        return "DO_NOT_CLICK"
-
-    if "click" in text:
-        return "CLICK"
-
-    if "share" in text and "do not" in text:
-        return "DO_NOT_SHARE"
-
-    if "share" in text:
-        return "SHARE"
-
-    if "report" in text:
-        return "REPORT"
-
-    if "connect" in text and "do not" in text:
-        return "DO_NOT_CONNECT"
-
-    if "connect" in text:
-        return "CONNECT"
-
-    return "UNKNOWN"
-
-
 def test_policy(requirement, scenario, decision):
 
-    expected = get_behaviour(scenario["expected_action"])
-    actual = get_behaviour(decision)
+    expected = requirement["expected_action"]
 
-    if expected == actual:
+    decision_actions = {
+        "Click the link to check the email.": "CLICK",
+        "Do not click and report the email.": "DO_NOT_CLICK",
+        "Report the suspicious email.": "REPORT_EMAIL",
+        "Ignore the suspicious email.": "IGNORE_EMAIL",
+        "Do not share the password.": "DO_NOT_SHARE",
+        "Use the AI tool with the company information.": "DO_NOT_ENTER",
+        "Do not enter the confidential information.": "DO_NOT_ENTER",
+        "Connect the USB to see what is on it.": "CONNECT",
+        "Do not connect the USB.": "DO_NOT_CONNECT",
+        "Report the lost laptop to IT.": "REPORT_LOST_DEVICE"
+    }
+
+    actual = decision_actions.get(decision, "UNKNOWN")
+
+    if actual == expected:
         result = "PASS"
     else:
         result = "FAIL"
 
     return {
+        "result": result,
         "requirement_id": requirement["id"],
         "scenario": scenario["name"],
         "expected": expected,
-        "actual": actual,
-        "result": result
+        "actual": actual
     }

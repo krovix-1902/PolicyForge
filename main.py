@@ -7,6 +7,7 @@ from app.simulation.decision_engine import make_decision
 from app.simulation.policy_tester import test_policy
 from app.simulation.relevance import is_relevant
 from app.findings.finding_engine import create_finding
+from app.findings.coverage import check_coverage
 
 
 with open("data/policies/test_policy.txt", "r") as f:
@@ -19,7 +20,32 @@ print()
 print("================================")
 print("        POLICYFORGE")
 print("================================")
+
+
 print()
+print("POLICY COVERAGE")
+print("----------------")
+
+coverage = check_coverage(requirements, scenarios)
+
+for item in coverage:
+
+    print(
+        item["requirement_id"],
+        "|",
+        item["topic"],
+        "|",
+        item["status"]
+    )
+
+    if item["status"] == "GAP":
+        print("  No test scenario available")
+
+
+print()
+print("POLICY FINDINGS")
+print("----------------")
+
 
 for requirement in requirements:
 
@@ -35,7 +61,8 @@ for requirement in requirements:
 
             decision = make_decision(
                 persona,
-                scenario
+                scenario,
+                requirement
             )
 
             result = test_policy(
@@ -52,6 +79,7 @@ for requirement in requirements:
                     risk
                 )
 
+                print()
                 print("FINDING")
                 print("----------------")
                 print("Persona:", persona["name"])
@@ -62,4 +90,3 @@ for requirement in requirements:
                 print("Control:", control)
                 print("Risk:", risk)
                 print("Severity:", finding["severity"])
-                print()
